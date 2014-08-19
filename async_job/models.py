@@ -15,3 +15,10 @@ class Job(models.Model):
 
     def __unicode__(self):
         return "%d, %d / %d" % (self.id, self.processed_records, self.total_records)
+
+class FileSaveRetrieve(models.Model):
+    input_file = models.FileField(upload_to='input')
+    output_file = models.FilePathField(null=True)
+
+    def __unicode__(self):
+        return self.input_file.url()
