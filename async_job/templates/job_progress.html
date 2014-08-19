@@ -1,0 +1,50 @@
+<script src="{{ STATIC_URL }}js/jquery.js" %}"></script>
+<script src="{{ STATIC_URL }}js/jquery-ui.js" %}"></script>
+<link rel='stylesheet' type='text/css' href='{{ STATIC_URL }}css/jquery-ui/smoothness/jquery-ui.css' />
+<style>
+.ui-progressbar {
+  position: relative;
+}
+.progress-label {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #fff;
+}
+</style>
+<script>
+$(document).ready(function() {
+  var progressbar = $('#progressbar');
+  var progressLabel = $('.progress-label');
+  var processed, total;
+  progressbar.progressbar({
+    value: false,
+    change: function() {
+      var txt = progressbar.progressbar( "value" ) + "% (" + processed + "/" + total + ")";
+      progressLabel.text(txt);
+    },
+    complete: function() {
+      progressLabel.text('Complete!');
+    },
+  });
+
+  var poll = function() {
+    $.getJSON("/progress/{{ job_id }}/json/", function(data) {
+      data = data[0]['fields'];
+      processed = data['processed_records'];
+      total = data['total_records'];
+      progressbar.progressbar('value', Math.round(processed / total * 100));
+      var output =  processed + '/' + total;
+      $('#j').html(output);
+
+      if (processed < total) {
+        setTimeout(poll, 2000);
+      }
+    });
+  };
+
+  poll();
+});
+</script>
+<div id="progressbar"><div class="progress-label">Loading...</div></div>
