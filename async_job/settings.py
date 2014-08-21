@@ -89,4 +89,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'async_job/media')
 
 import djcelery
 djcelery.setup_loader()
+BROKER_URL = 'amqp://guest:guest@localhost:5672/dev'
 
