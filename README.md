@@ -1,8 +1,8 @@
 ### Dependencies
 ```
 sudo pip install django-celery
-sudo pip install jquery
-sudo pip install jquery-ui
+sudo pip install django-jquery
+sudo pip install django-bootstrap3
 sudo apt-get install rabbitmq-server
 ```
 

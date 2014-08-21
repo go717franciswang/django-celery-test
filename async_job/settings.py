@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'async_job',
     'djcelery',
     'jquery',
-    'jquery_ui',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (

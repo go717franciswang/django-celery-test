@@ -1,42 +1,30 @@
 <script src="{{ STATIC_URL }}js/jquery.js"></script>
-<script src="{{ STATIC_URL }}js/jquery-ui.js"></script>
-<link rel='stylesheet' type='text/css' href='{{ STATIC_URL }}css/jquery-ui/smoothness/jquery-ui.css' />
-<style>
-.ui-progressbar {
-  position: relative;
-}
-.progress-label {
-  position: absolute;
-  left: 50%;
-  top: 4px;
-  font-weight: bold;
-  text-shadow: 1px 1px 0 #fff;
-}
-</style>
+{% load bootstrap3 %}
+{% bootstrap_css %}
 <script>
 $(document).ready(function() {
-  var progressbar = $('#progressbar');
-  var progressLabel = $('.progress-label');
-  var processed, total;
-  progressbar.progressbar({
-    value: false,
-    change: function() {
-      var txt = progressbar.progressbar( "value" ) + "% (" + processed + "/" + total + ")";
-      progressLabel.text(txt);
-    },
-    complete: function() {
-      progressLabel.text('Complete!');
-    },
-  });
+  var succeededBar = $('.progress-bar-success');
+  var failedBar = $('.progress-bar-danger');
+  var remainingBar = $('.progress-bar:not(.active)');
 
   var poll = function() {
     $.getJSON("/progress/{{ job_id }}/json/", function(data) {
-      data = data[0]['fields'];
+      var data = data[0]['fields'];
       processed = data['processed_records'];
       total = data['total_records'];
-      progressbar.progressbar('value', Math.round(processed / total * 100));
-      var output =  processed + '/' + total;
-      $('#j').html(output);
+
+      var p1 = Math.round(processed / total * 100) + '%';
+      var p2 = Math.round(0 / total * 100) + '%';
+      var p3 = Math.round((total-processed) / total * 100) + '%';
+
+      succeededBar.css('width', p1);
+      succeededBar.children().html(p1);
+
+      failedBar.css('width', p2);
+      failedBar.children().html(p2);
+
+      remainingBar.css('width', p3);
+      remainingBar.children().html(p3 +' Remaining');
 
       if (processed < total) {
         setTimeout(poll, 2000);
@@ -47,4 +35,14 @@ $(document).ready(function() {
   poll();
 });
 </script>
-<div id="progressbar"><div class="progress-label">Loading...</div></div>
+<div class="progress">
+  <div class="progress-bar progress-bar-success progress-bar-striped active">
+    <span></span>
+  </div>
+  <div class="progress-bar progress-bar-danger progress-bar-striped active">
+    <span></span>
+  </div>
+  <div class="progress-bar" style="width:100%; background-color: #E0E0EB; color: black">
+    <span>Loading...</span>
+  </div>
+</div>
