@@ -15,8 +15,6 @@ sudo rabbitmqctl add_vhost dev
 sudo rabbitmqctl set_permissions -p dev guest '.*' '.*' '.*'
 ```
 
-### Config
-
 ### Run
 ```
 # start test server
