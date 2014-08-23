@@ -23,6 +23,8 @@ sudo rabbitmqctl set_permissions -p dev guest '.*' '.*' '.*'
 python manage.py runserver 0.0.0.0:8000
 
 # start django-celery
-python manage.py celery worker
+# use --purge to remove old tasks in queue
+python manage.py celery worker -l info
+
 ```
 

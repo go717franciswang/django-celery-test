@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -89,5 +88,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'async_job/media')
 
 import djcelery
 djcelery.setup_loader()
+# http://celery.readthedocs.org/en/latest/configuration.html
 BROKER_URL = 'amqp://guest:guest@localhost:5672/dev'
+CELERY_RESULT_BACKEND = 'amqp://guest:guest@localhost:5672/dev'
+CELERY_CREATE_MISSING_QUEUES = True
+# CELERYD_TASK_SOFT_TIME_LIMIT = 1
+
 
